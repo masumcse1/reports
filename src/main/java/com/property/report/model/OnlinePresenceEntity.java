@@ -2,12 +2,12 @@ package com.property.report.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -39,5 +39,13 @@ public class OnlinePresenceEntity {
     private Timestamp sslCertificateLastUpdate;
     private Boolean freeGoogleBookingLinks;
     private Timestamp freeGoogleBookingLinksLastUpdate;
+
+    @JsonProperty("brandOfBookingEngineDto")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "brand_of_booking_engine_id")
+    private BrandOfBookingEngine brandOfBookingEngine;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<SocialMedia> socialMedias;
 
 }

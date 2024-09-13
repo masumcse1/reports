@@ -1,5 +1,6 @@
 package com.property.report.service.ss;
 
+import com.property.report.model.OnlinePresenceEntity;
 import com.property.report.model.PropertyEntity;
 import com.property.report.repository.ss.PropertyEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +16,22 @@ public class PropertyEntityServiceImpl implements PropertyEntityService {
 
     public void save(List<PropertyEntity> properties) {
         for (PropertyEntity property : properties) {
-            if (property.getOnlinePresence().getPropertyId() == null) {
+            OnlinePresenceEntity onlinePresence = property.getOnlinePresence();
+
+            if (onlinePresence.getPropertyId() == null) {
                 property.setOnlinePresence(null);
+            } else if (onlinePresence.getBrandOfBookingEngine().getId() == null) {
+                onlinePresence.setBrandOfBookingEngine(null);
             }
 
             property.getAddresses().stream()
                     .filter(a -> a.getCountry().getId() == null)
                     .forEach(a -> a.setCountry(null));
 
-            System.out.println(property);
+            property.getEmails().stream()
+                    .filter(a -> a.getEmailType().getId() == null)
+                    .forEach(a -> a.setEmailType(null));
+
             propertyRepository.save(property);
         }
     }
