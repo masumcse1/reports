@@ -1,9 +1,11 @@
 package com.property.report.service.ss;
 
-import com.property.report.common.dto.ss.PropertyWithOnlinePresenceDTO;
+import com.property.report.model.PropertyEntity;
 
 import java.util.List;
 
 public interface PropertyEntityService {
-    void save(List<PropertyWithOnlinePresenceDTO> properties);
+
+    public void save(List<PropertyEntity> properties);
+
 }

@@ -1,18 +1,19 @@
 package com.property.report.job;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.property.report.service.ss.PropertyExecutorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PropertyScheduler {
 
-    @Value("${job.schedule.page-size}")
-    private Integer size;
+    @Autowired
+    private PropertyExecutorService propertyExecutorService;
 
     @Scheduled(fixedDelayString = "${job.schedule.fixed-delay}")
     public void merge() {
-
+        propertyExecutorService.execute();
     }
 
 }

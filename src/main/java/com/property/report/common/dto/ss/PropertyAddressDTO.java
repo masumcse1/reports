@@ -3,6 +3,7 @@ package com.property.report.common.dto.ss;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.property.report.common.dto.CountryDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class PropertyAddressDTO {
     private Integer id;
     private String addressType;
     private String cityName;
-    private Country country;
+    private CountryDto country;
 
     @Override
     public boolean equals(Object o) {

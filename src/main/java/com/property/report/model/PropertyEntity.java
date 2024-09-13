@@ -1,25 +1,23 @@
 package com.property.report.model;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(name = "property")
+@Table(name = "property_entity")
 public class PropertyEntity {
-
 
     @Id
     private Integer id;
+
     private String cultSwitchId;
     private String code;
     private String name;
