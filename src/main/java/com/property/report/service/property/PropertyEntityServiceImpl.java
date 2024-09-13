@@ -2,13 +2,12 @@ package com.property.report.service.property;
 
 import com.property.report.model.OnlinePresenceEntity;
 import com.property.report.model.PropertyEntity;
-import com.property.report.repository.ss.PropertyEntityRepository;
+import com.property.report.repository.property.PropertyEntityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 
 @Service

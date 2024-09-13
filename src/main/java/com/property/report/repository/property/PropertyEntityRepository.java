@@ -1,4 +1,4 @@
-package com.property.report.repository.ss;
+package com.property.report.repository.property;
 
 import com.property.report.model.PropertyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
