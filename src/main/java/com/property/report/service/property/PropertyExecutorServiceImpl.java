@@ -44,6 +44,10 @@ public class PropertyExecutorServiceImpl implements PropertyExecutorService {
 
                 propertyEntityService.save(properties.getContent());
                 pageable = pageable.next();
+
+                paginationLog.setPageNumber(pageable.getPageNumber());
+                paginationLogRepository.save(paginationLog);
+
                 log.info("Current page for property : ---" + pageable.getPageNumber());
             } while (pageable.getPageNumber() < properties.getTotalPages());
 
