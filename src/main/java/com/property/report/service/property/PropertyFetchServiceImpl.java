@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.property.report.common.dto.AccessTokenSupplier;
 import com.property.report.model.PropertyEntity;
 import com.property.report.service.TokenService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class PropertyFetchServiceImpl implements PropertyFetchService {
 
     @Autowired
@@ -41,6 +43,8 @@ public class PropertyFetchServiceImpl implements PropertyFetchService {
                 + pageable.getPageNumber()
                 + "&size=" + pageable.getPageSize();
 
+        log.info("---start data fetch from supplier api--"+pageable.getPageNumber());
+
         ResponseEntity<?> response = template.exchange(
                 apiUrl,
                 HttpMethod.GET,
@@ -54,7 +58,7 @@ public class PropertyFetchServiceImpl implements PropertyFetchService {
                 .convertValue(result.get("content"),
                         new TypeReference<List<PropertyEntity>>() {
                         });
-
+        log.info("---done data fetch from supplier api--"+pageable.getPageNumber());
         long totalElements = (Integer) result.get("totalElements");
         return new PageImpl<>(content, pageable, totalElements);
     }

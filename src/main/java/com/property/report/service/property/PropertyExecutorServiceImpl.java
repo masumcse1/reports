@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Slf4j
 @Service
 public class PropertyExecutorServiceImpl implements PropertyExecutorService {
@@ -22,13 +24,14 @@ public class PropertyExecutorServiceImpl implements PropertyExecutorService {
     private Integer size;
 
     @Override
-    public void execute() {
+    public void dataSynForProperty() {
         try {
             Pageable pageable = Pageable.ofSize(size);
             Page<PropertyEntity> properties;
 
             do {
                 properties = propertyFetchService.getProperties(pageable);
+
                 propertyEntityService.save(properties.getContent());
                 pageable = pageable.next();
             } while (pageable.getPageNumber() < properties.getTotalPages());
