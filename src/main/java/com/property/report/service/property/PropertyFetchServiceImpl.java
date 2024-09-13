@@ -1,4 +1,4 @@
-package com.property.report.service.ss;
+package com.property.report.service.property;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

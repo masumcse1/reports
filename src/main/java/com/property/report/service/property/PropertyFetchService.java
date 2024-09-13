@@ -1,4 +1,4 @@
-package com.property.report.service.ss;
+package com.property.report.service.property;
 
 import com.property.report.model.PropertyEntity;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package com.property.report.service.ss;
+package com.property.report.service.property;
 
 public interface PropertyExecutorService {
 

@@ -1,9 +1,10 @@
-package com.property.report.service.ss;
+package com.property.report.service.property;
 
 import com.property.report.model.OnlinePresenceEntity;
 import com.property.report.model.PropertyEntity;
 import com.property.report.repository.ss.PropertyEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class PropertyEntityServiceImpl implements PropertyEntityService {
     @Autowired
     private PropertyEntityRepository propertyRepository;
 
+    @Async
     public void save(List<PropertyEntity> properties) {
         for (PropertyEntity property : properties) {
             OnlinePresenceEntity onlinePresence = property.getOnlinePresence();

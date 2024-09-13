@@ -1,6 +1,6 @@
 package com.property.report.job;
 
-import com.property.report.service.ss.PropertyExecutorService;
+import com.property.report.service.property.PropertyExecutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
