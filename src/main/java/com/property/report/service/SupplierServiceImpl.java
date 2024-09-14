@@ -6,6 +6,7 @@ import com.property.report.model.Country;
 import com.property.report.model.Property;
 import com.property.report.repository.PropertyRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -333,14 +334,19 @@ public class SupplierServiceImpl implements SupplierService {
     public static String getPropertyEmail(PropertyDto propertyEntity) {
         //fetch primary email if possible, otherwise return any email or null
         String emailAddress = null;
+
         if (!CollectionUtils.isEmpty(propertyEntity.getEmails())) {
-            List<EmailEntity> filteredPrimaryEmail = propertyEntity.getEmails().stream().filter(p -> p.getEmailType().getCode().equals("primary")).toList();
+            List<EmailEntity> filteredPrimaryEmail = propertyEntity.getEmails().stream()
+                    .filter(p -> StringUtils.equals(p.getEmailType().getCode(), "primary"))
+                    .toList();
+
             if (!CollectionUtils.isEmpty(filteredPrimaryEmail)) {
                 emailAddress = filteredPrimaryEmail.get(0).getEmail();
             } else {
                 emailAddress = propertyEntity.getEmails().get(0).getEmail();
             }
         }
+
         return emailAddress;
     }
 }
