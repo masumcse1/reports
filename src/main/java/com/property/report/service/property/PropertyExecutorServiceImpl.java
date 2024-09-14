@@ -1,8 +1,8 @@
 package com.property.report.service.property;
 
+import com.property.report.common.dto.PropertyDto;
 import com.property.report.model.PaginationLog;
-import com.property.report.model.PropertyEntity;
-import com.property.report.repository.property.PaginationLogRepository;
+import com.property.report.repository.PaginationLogRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ public class PropertyExecutorServiceImpl implements PropertyExecutorService {
     private PropertyFetchService propertyFetchService;
 
     @Autowired
-    private PropertyEntityService propertyEntityService;
+    private PropertyStorageService propertyStorageService;
 
     @Value("${job.schedule.page-size}")
     private Integer size;
@@ -37,12 +37,12 @@ public class PropertyExecutorServiceImpl implements PropertyExecutorService {
                 .withPage(paginationLog.getPageNumber());
 
         try {
-            Page<PropertyEntity> properties;
+            Page<PropertyDto> properties;
 
             do {
                 properties = propertyFetchService.getProperties(pageable);
 
-                propertyEntityService.save(properties.getContent());
+                propertyStorageService.save(properties.getContent());
                 pageable = pageable.next();
 
                 paginationLog.setPageNumber(pageable.getPageNumber());

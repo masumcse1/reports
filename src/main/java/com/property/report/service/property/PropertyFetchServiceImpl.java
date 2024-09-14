@@ -3,7 +3,7 @@ package com.property.report.service.property;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.property.report.common.dto.AccessTokenSupplier;
-import com.property.report.model.PropertyEntity;
+import com.property.report.common.dto.PropertyDto;
 import com.property.report.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class PropertyFetchServiceImpl implements PropertyFetchService {
     @Value("${supplier.api.url}")
     private String supplierUrl;
 
-    public Page<PropertyEntity> getProperties(Pageable pageable) {
+    public Page<PropertyDto> getProperties(Pageable pageable) {
         AccessTokenSupplier tokenFromSuppliers = tokenService.getTokenFromSuppliers();
         String token = tokenFromSuppliers.getAccessToken();
 
@@ -43,7 +43,7 @@ public class PropertyFetchServiceImpl implements PropertyFetchService {
                 + pageable.getPageNumber()
                 + "&size=" + pageable.getPageSize();
 
-        log.info("---start data fetch from supplier api--"+pageable.getPageNumber());
+        log.info("---start data fetch from supplier api--" + pageable.getPageNumber());
 
         ResponseEntity<?> response = template.exchange(
                 apiUrl,
@@ -54,11 +54,11 @@ public class PropertyFetchServiceImpl implements PropertyFetchService {
         Map<String, Object> responseBody = (Map) response.getBody();
         Map<String, Object> result = (Map) responseBody.get("result");
 
-        List<PropertyEntity> content = new ObjectMapper()
+        List<PropertyDto> content = new ObjectMapper()
                 .convertValue(result.get("content"),
-                        new TypeReference<List<PropertyEntity>>() {
+                        new TypeReference<List<PropertyDto>>() {
                         });
-        log.info("---done data fetch from supplier api--"+pageable.getPageNumber());
+        log.info("---done data fetch from supplier api--" + pageable.getPageNumber());
         long totalElements = (Integer) result.get("totalElements");
         return new PageImpl<>(content, pageable, totalElements);
     }

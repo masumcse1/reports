@@ -1,4 +1,4 @@
-package com.property.report.repository.property;
+package com.property.report.repository;
 
 import com.property.report.model.PaginationLog;
 import org.springframework.data.jpa.repository.JpaRepository;
