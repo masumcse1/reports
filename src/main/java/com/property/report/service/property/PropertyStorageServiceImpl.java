@@ -26,7 +26,10 @@ public class PropertyStorageServiceImpl implements PropertyStorageService {
 
             if (!data.getAddresses().isEmpty()) {
                 CountryDto countryDto = data.getAddresses().get(0).getCountry();
-                country = new Country(countryDto);
+
+                if (countryDto.getId() != null) {
+                    country = new Country(countryDto);
+                }
             }
 
             Property property = new Property(data, data.getOnlinePresence(), country);

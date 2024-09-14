@@ -74,8 +74,8 @@ public class Property {
 
     private String googleMapsWithGoogleBusinessPlacesIdScreenshotUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "country_id", referencedColumnName = "id", nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "country_id", referencedColumnName = "id")
     private Country country;
 
     public Property(PropertyDto propertyDto, FreeGoogleBooking freeGoogleBooking, Country country) {
