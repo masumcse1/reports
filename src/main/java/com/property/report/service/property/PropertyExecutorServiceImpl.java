@@ -51,13 +51,12 @@ public class PropertyExecutorServiceImpl implements PropertyExecutorService {
                 log.info("Current page for property : ---" + pageable.getPageNumber());
             } while (pageable.getPageNumber() < properties.getTotalPages());
 
-            paginationLog.setPageNumber(0);
+           // paginationLog.setPageNumber(0);
         } catch (Exception ex) {
-            paginationLog.setPageNumber(pageable.getPageNumber());
             log.error("Data unable to read", ex);
         }
 
-        paginationLogRepository.save(paginationLog);
+        // paginationLogRepository.save(paginationLog);
     }
 
 }
