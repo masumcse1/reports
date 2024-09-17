@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 
 @Component
 @Slf4j
@@ -23,7 +22,7 @@ public class PropertyScheduler {
     public void merge() throws Exception {
 
         if (!propertyExecutorService.getPaginationLog().get().getIsReadAllPage() &&  enabled){
-                log.info("Starting Scheduled Task..."+ Instant.now());
+                log.info("Starting Scheduled Task...");
 
             try {
                 propertyExecutorService.dataSynForProperty();
@@ -33,9 +32,9 @@ public class PropertyScheduler {
                 propertyExecutorService.dataSynForProperty();
             }
 
-            log.info("Scheduled Task completed successfully!"+ Instant.now());
+            log.info("Scheduled Task completed successfully!");
         }else {
-            log.info("----------not running this data sync schduler--------------"+ Instant.now());
+            log.info("----------not running this data sync scheduler--------------");
         }
 
 
