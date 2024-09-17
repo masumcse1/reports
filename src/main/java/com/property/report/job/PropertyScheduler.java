@@ -34,9 +34,11 @@ public class PropertyScheduler {
             }
 
             log.info("Scheduled Task completed successfully!"+ Instant.now());
+        }else {
+            log.info("----------not running this data sync schduler--------------"+ Instant.now());
         }
 
-        log.info("----------done--------------"+ Instant.now());
+
     }
 
 }
