@@ -9,9 +9,9 @@ import lombok.Data;
 public class PaginationLog {
 
     @Id
-    private Integer id ;
+    private Integer id = 1;
 
-    private Integer pageNumber ;
+    private Integer pageNumber = 0;
 
     private Boolean isReadAllPage ;
 
