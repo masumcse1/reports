@@ -19,7 +19,7 @@ public class PropertyScheduler {
     boolean enabled;
 
     @Scheduled(fixedDelayString = "${job.schedule.fixed-delay}")
-    public void merge() throws Exception {
+    public void merge()  {
 
         if (!propertyExecutorService.getPaginationLog().get().getIsReadAllPage() &&  enabled){
                 log.info("Starting Scheduled Task...");
@@ -28,8 +28,12 @@ public class PropertyScheduler {
                 propertyExecutorService.dataSynForProperty();
             } catch (Exception e) {
                 log.error("Error correction with retrying: ---" + e.getMessage());
-                Thread.sleep(3000);
-                propertyExecutorService.dataSynForProperty();
+                try {
+                    Thread.sleep(30000);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+                merge();
             }
 
             log.info("Scheduled Task completed successfully!");

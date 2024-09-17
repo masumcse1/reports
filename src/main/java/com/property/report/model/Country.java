@@ -1,6 +1,7 @@
 package com.property.report.model;
 
 import com.property.report.common.dto.CountryDto;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class Country {
     @Id
     private Integer id;
 
+    @Column(unique = true)
     private String name;
 
     private String fullName;
