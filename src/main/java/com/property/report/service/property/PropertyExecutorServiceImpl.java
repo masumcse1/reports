@@ -30,7 +30,6 @@ public class PropertyExecutorServiceImpl implements PropertyExecutorService {
 
 
     @Override
-    @Transactional
     public void dataSynForProperty() throws Exception {
 
         PaginationLog paginationLog = new PaginationLog();
