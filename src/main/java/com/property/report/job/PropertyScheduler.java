@@ -3,6 +3,7 @@ package com.property.report.job;
 import com.property.report.service.property.PropertyExecutorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +16,27 @@ public class PropertyScheduler {
     @Autowired
     private PropertyExecutorService propertyExecutorService;
 
+    @Value("${cron.flag}")
+    boolean enabled;
+
     @Scheduled(fixedDelayString = "${job.schedule.fixed-delay}")
-    public void merge() {
-        log.info("Starting Scheduled Task..."+ Instant.now());
-        propertyExecutorService.dataSynForProperty();
+    public void merge() throws Exception {
 
-        log.info("Scheduled Task completed successfully!"+ Instant.now());
+        if (!propertyExecutorService.getPaginationLog().get().getIsReadAllPage() &&  enabled){
+                log.info("Starting Scheduled Task..."+ Instant.now());
 
+            try {
+                propertyExecutorService.dataSynForProperty();
+            } catch (Exception e) {
+                log.error("Error correction with retrying: ---" + e.getMessage());
+                Thread.sleep(3000);
+                propertyExecutorService.dataSynForProperty();
+            }
+
+            log.info("Scheduled Task completed successfully!"+ Instant.now());
+        }
+
+        log.info("----------done--------------"+ Instant.now());
     }
 
 }

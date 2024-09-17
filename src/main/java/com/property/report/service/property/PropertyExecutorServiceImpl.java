@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -26,37 +29,49 @@ public class PropertyExecutorServiceImpl implements PropertyExecutorService {
     @Value("${job.schedule.page-size}")
     private Integer size;
 
+
     @Override
-    public void dataSynForProperty() {
+    @Transactional
+    public void dataSynForProperty() throws Exception {
+
         PaginationLog paginationLog = new PaginationLog();
 
         paginationLog = paginationLogRepository.findById(paginationLog.getId())
                 .orElse(paginationLog);
 
-        Pageable pageable = Pageable.ofSize(size)
-                .withPage(paginationLog.getPageNumber());
-
+        Pageable pageable = Pageable.ofSize(size).withPage(paginationLog.getPageNumber());
+        log.info("starting page for reading : ---" + paginationLog.getPageNumber());
         try {
             Page<PropertyDto> properties;
 
             do {
                 properties = propertyFetchService.getProperties(pageable);
 
+                if(properties.isEmpty()){
+                    paginationLog.setIsReadAllPage(true);
+                    paginationLogRepository.save(paginationLog);
+                    break;
+                }
                 propertyStorageService.save(properties.getContent());
                 pageable = pageable.next();
 
                 paginationLog.setPageNumber(pageable.getPageNumber());
                 paginationLogRepository.save(paginationLog);
+                log.info("current page for reading : ---" + pageable.getPageNumber());
 
-                log.info("Current page for property : ---" + pageable.getPageNumber());
             } while (pageable.getPageNumber() < properties.getTotalPages());
 
-           // paginationLog.setPageNumber(0);
         } catch (Exception ex) {
-            log.error("Data unable to read", ex);
+            log.error("Error page no : ---" + pageable.getPageNumber());
+            log.error("Error page reason : ---" + ex.getCause()+"-----"+ex.getMessage());
+            //log.error("Data unable to process", ex);
+            throw new Exception(String.valueOf(pageable.getPageNumber()));
         }
 
-        // paginationLogRepository.save(paginationLog);
+    }
+
+    public Optional<PaginationLog>  getPaginationLog(){
+        return paginationLogRepository.findById(1);
     }
 
 }

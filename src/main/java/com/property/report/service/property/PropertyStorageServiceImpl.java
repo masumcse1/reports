@@ -19,7 +19,6 @@ public class PropertyStorageServiceImpl implements PropertyStorageService {
     private PropertyRepository propertyRepository;
 
     public void save(List<PropertyDto> properties) {
-        log.info("---start data save done for page...");
 
         properties.forEach(data -> {
             Country country = null;
@@ -36,7 +35,7 @@ public class PropertyStorageServiceImpl implements PropertyStorageService {
             propertyRepository.save(property);
         });
 
-        log.info("--end-data save done for page...");
+        log.info("---data save done for this page...");
     }
 
 }

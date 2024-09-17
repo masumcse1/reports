@@ -43,8 +43,6 @@ public class PropertyFetchServiceImpl implements PropertyFetchService {
                 + pageable.getPageNumber()
                 + "&size=" + pageable.getPageSize();
 
-        log.info("---start data fetch from supplier api--" + pageable.getPageNumber());
-
         ResponseEntity<?> response = template.exchange(
                 apiUrl,
                 HttpMethod.GET,
