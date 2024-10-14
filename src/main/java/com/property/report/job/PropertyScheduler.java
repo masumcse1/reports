@@ -15,10 +15,10 @@ public class PropertyScheduler {
     @Autowired
     private PropertyExecutorService propertyExecutorService;
 
-    @Value("${cron.flag}")
+    @Value("${property.cron.flag}")
     boolean enabled;
 
-    @Scheduled(fixedDelayString = "${job.schedule.fixed-delay}")
+    @Scheduled(fixedDelayString = "${property.scheduler.fixed-delay}")
     public void merge()  {
 
         if (!propertyExecutorService.getPaginationLog().get().getIsReadAllPage() &&  enabled){
@@ -38,7 +38,7 @@ public class PropertyScheduler {
 
             log.info("Scheduled Task completed successfully!");
         }else {
-            log.info("----------not running this data sync scheduler--------------");
+            log.info("----------property data sync scheduler is not running --------------");
         }
 
 

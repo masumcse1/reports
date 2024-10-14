@@ -1,6 +1,7 @@
 package com.property.report.service;
 
 import com.property.report.common.dto.*;
+import com.property.report.exception.DataNotFoundException;
 import com.property.report.model.Country;
 import com.property.report.model.Property;
 import com.property.report.repository.CountryRepository;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +47,9 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Autowired
     EwsService ewsService;
+
+    @Value("${updatePropertyByCountry.cron.flag}")
+    boolean enabled;
 
     @Override
     @Transactional
@@ -199,6 +204,11 @@ public class PropertyServiceImpl implements PropertyService {
 
         PropertyDto dataByPropertyId = supplierService.getDataByPropertyId(propertyId, token);
 
+        if (Objects.isNull(dataByPropertyId)) {
+            log.error("No property data found for property ID: {}", propertyId);
+            throw new DataNotFoundException("No property data found for property ID: " + propertyId);
+        }
+
         FreeGoogleBooking freeGoogleBooking = supplierService.getOnlinePresenceById(propertyId);
 
         Property byPropertyId = propertyRepository.findByPropertyId(propertyId);
@@ -216,16 +226,20 @@ public class PropertyServiceImpl implements PropertyService {
 
     }
 
-   /* @Scheduled(cron = "0 0 10 * * *")
+    @Scheduled(cron = "0 0 10 * * *")
     public void updatePropertyByCountry() {
-
+      if(enabled){
         List<Country> countryList = countryRepository.findAll();
         for (Country country : countryList) {
             log.info("Cron started for country :" + country.getName());
             savePropertyByCountryId(country);
         }
+
+      }else{
+          log.info("updatePropertyByCountry flag is disabled from application configuration");
+      }
     }
-*/
+
     @Scheduled(cron = "0 0 6 * * *")
     public void sendWorldCsvByEmail() {
 

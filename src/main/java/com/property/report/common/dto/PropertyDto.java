@@ -1,5 +1,6 @@
 package com.property.report.common.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,10 @@ public class PropertyDto {
 
     private String emailAddressComment;
 
+    private List<EmailEntity> emails;
+
+    private List<AddressDto> addresses;
+
     private Boolean isDeleted;
 
     private Boolean forTesting;
@@ -39,8 +44,6 @@ public class PropertyDto {
 
     private FreeGoogleBooking onlinePresence;
 
-    private List<EmailEntity> emails;
 
-    private List<AddressDto> addresses;
 
 }

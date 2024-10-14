@@ -16,7 +16,7 @@ public class GlobalCheckHandler {
 
     @ExceptionHandler(value = DataNotFoundException.class)
     public ResponseEntity<ApiError> dataNotFound(DataNotFoundException exception) {
-        return new ResponseEntity<ApiError>(new ApiError(HttpStatus.NO_CONTENT, exception.getMessage(),
+        return new ResponseEntity<ApiError>(new ApiError(HttpStatus.NOT_FOUND, exception.getMessage(),
                 exception), HttpStatus.NOT_FOUND);
     }
 

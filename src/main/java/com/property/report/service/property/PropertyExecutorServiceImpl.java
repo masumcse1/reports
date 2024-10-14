@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Slf4j
@@ -25,7 +25,7 @@ public class PropertyExecutorServiceImpl implements PropertyExecutorService {
     @Autowired
     private PropertyStorageService propertyStorageService;
 
-    @Value("${job.schedule.page-size}")
+    @Value("${property.schedule.page-size}")
     private Integer size;
 
 

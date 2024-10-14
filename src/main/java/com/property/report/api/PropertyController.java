@@ -75,12 +75,9 @@ public class PropertyController {
             description = "Get csv file for a country by country Code. Please add country code in capital letters.Country code as per ISO 3166-1 alpha-2")
     @GetMapping("/api/v1/property-csv")
     public void countryCSV(@RequestParam(value = "country_code") String code,
-                           @RequestHeader(value = "api-key", required = false) String apiKey,
                            HttpServletResponse servletResponse) throws IOException {
 
-        if (!this.apiKey.equals(apiKey)) {
-            return;
-        }
+
         try {
             ACCESS_TOKEN = tokenService.getTokenFromSuppliers().getAccessToken();
             servletResponse.setContentType("text/csv");
