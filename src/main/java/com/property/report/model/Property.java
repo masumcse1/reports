@@ -74,11 +74,16 @@ public class Property {
 
     private String googleMapsWithGoogleBusinessPlacesIdScreenshotUrl;
 
+    private String screenshotOfBookingEngineUrl;
+
+    private Integer brandOfBookingEngineId;
+
+    private Integer eHotelId;
+
     @ManyToOne
-    @JoinColumn(name = "country_id", referencedColumnName = "id",nullable = true)
+    @JoinColumn(name = "country_id", referencedColumnName = "id", nullable = true)
     private Country country;
-
-
+    
     public Property(PropertyDto propertyDto, FreeGoogleBooking freeGoogleBooking, Country country) {
         this.id = propertyDto.getId();
         this.propertyId = propertyDto.getId();
@@ -105,6 +110,8 @@ public class Property {
             this.googleAddress = freeGoogleBooking.getGoogleAddress();
             this.googleMetaSearchLinksUrl = freeGoogleBooking.getGoogleMetaSearchLinksUrl();
             this.googleMapsWithGoogleBusinessPlacesIdScreenshotUrl = freeGoogleBooking.getGoogleMapsWithGoogleBusinessPlacesIdScreenshotUrl();
+            this.screenshotOfBookingEngineUrl = freeGoogleBooking.getScreenshotOfBookingEngineUrl();
+            this.brandOfBookingEngineId = freeGoogleBooking.getBrandOfBookingEngineId();
         }
     }
 }

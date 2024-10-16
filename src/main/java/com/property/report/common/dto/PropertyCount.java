@@ -57,6 +57,12 @@ public class PropertyCount {
 
     private float longitude;
 
+    private String screenshotOfBookingEngineUrl;
+
+    private Integer brandOfBookingEngineId;
+
+    private Integer eHotelId;
+
     public PropertyCount(String totalSumOfProperties) {
         this.country = totalSumOfProperties;
     }

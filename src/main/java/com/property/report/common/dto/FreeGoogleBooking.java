@@ -43,5 +43,8 @@ public class FreeGoogleBooking {
 
     private String googleMapsWithGoogleBusinessPlacesIdScreenshotUrl;
 
+    private String screenshotOfBookingEngineUrl;
+
+    private Integer brandOfBookingEngineId;
 
 }
