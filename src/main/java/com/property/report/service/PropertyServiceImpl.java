@@ -228,16 +228,16 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Scheduled(cron = "0 0 10 * * *")
     public void updatePropertyByCountry() {
-      if(enabled){
-        List<Country> countryList = countryRepository.findAll();
-        for (Country country : countryList) {
-            log.info("Cron started for country :" + country.getName());
-            savePropertyByCountryId(country);
-        }
+        if (enabled) {
+            List<Country> countryList = countryRepository.findAll();
+            for (Country country : countryList) {
+                log.info("Cron started for country :" + country.getName());
+                savePropertyByCountryId(country);
+            }
 
-      }else{
-          log.info("updatePropertyByCountry flag is disabled from application configuration");
-      }
+        } else {
+            log.info("updatePropertyByCountry flag is disabled from application configuration");
+        }
     }
 
     @Scheduled(cron = "0 0 6 * * *")
@@ -259,7 +259,6 @@ public class PropertyServiceImpl implements PropertyService {
             }
 
             for (Property property : propertyList) {
-
                 if (hashMap.containsKey(property.getCountry().getId())) {
                     PropertyCount propertyCount = hashMap.get(property.getCountry().getId());
                     setPropertyCount(property, propertyCount);
@@ -267,11 +266,14 @@ public class PropertyServiceImpl implements PropertyService {
                     PropertyCount propertyCount = new PropertyCount();
                     propertyCount.setCountry(property.getCountry().getName());
                     propertyCount.setCountryCode(property.getCountry().getCode());
+                    propertyCount.setScreenshotOfBookingEngineUrl(property.getScreenshotOfBookingEngineUrl());
+                    propertyCount.setBrandOfBookingEngineId(property.getBrandOfBookingEngineId());
+                    propertyCount.setEHotelId(property.getEHotelId());
                     setPropertyCount(property, propertyCount);
                     hashMap.put(property.getCountry().getId(), propertyCount);
                 }
-
             }
+
             page++;
         }
 
@@ -358,7 +360,6 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     private void setPropertyCount(Property property, PropertyCount propertyCount) {
-
         if (Objects.nonNull(property.getPropertyId())) {
             propertyCount.setPropertyId(propertyCount.getPropertyId() + 1);
         }
@@ -413,39 +414,25 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     private void setPropertyTotalCount(PropertyCount propertyCount, PropertyCount totalCount) {
-
         totalCount.setPropertyId(propertyCount.getPropertyId() + totalCount.getPropertyId());
-
         totalCount.setEmail(propertyCount.getEmail() + totalCount.getEmail());
-
         totalCount.setGoogleBusinessID(propertyCount.getGoogleBusinessID() + totalCount.getGoogleBusinessID());
-
+        totalCount.setScreenshotOfBookingEngineUrl("");
+        totalCount.setBrandOfBookingEngineId(0);
+        totalCount.setEHotelId(0);
         totalCount.setName(propertyCount.getName() + totalCount.getName());
-
         totalCount.setGoogleAddress(propertyCount.getGoogleAddress() + totalCount.getGoogleAddress());
-
         totalCount.setGooglePhoneNumber(propertyCount.getGooglePhoneNumber() + totalCount.getGooglePhoneNumber());
-
         totalCount.setGoogleCategory(propertyCount.getGoogleCategory() + totalCount.getGoogleCategory());
-
         totalCount.setUsedBookingEngine(propertyCount.getUsedBookingEngine() + totalCount.getUsedBookingEngine());
-
         totalCount.setGoogleRating(propertyCount.getGoogleRating() + totalCount.getGoogleRating());
-
         totalCount.setCmsUsedInWebsite(propertyCount.getCmsUsedInWebsite() + totalCount.getCmsUsedInWebsite());
-
         totalCount.setEmailAddressUnsubscribe(propertyCount.getEmailAddressUnsubscribe() + totalCount.getEmailAddressUnsubscribe());
-
         totalCount.setFreeGoogleBookingLinks(propertyCount.getFreeGoogleBookingLinks() + totalCount.getFreeGoogleBookingLinks());
-
         totalCount.setTopic(propertyCount.getTopic() + totalCount.getTopic());
-
         totalCount.setSentAt(propertyCount.getSentAt() + totalCount.getSentAt());
-
         totalCount.setWebsiteURL(propertyCount.getWebsiteURL() + totalCount.getWebsiteURL());
-
         totalCount.setForTesting(propertyCount.getForTesting() + totalCount.getForTesting());
-
         totalCount.setIsDeleted(propertyCount.getIsDeleted() + totalCount.getIsDeleted());
     }
 
