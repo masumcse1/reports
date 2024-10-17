@@ -266,9 +266,6 @@ public class PropertyServiceImpl implements PropertyService {
                     PropertyCount propertyCount = new PropertyCount();
                     propertyCount.setCountry(property.getCountry().getName());
                     propertyCount.setCountryCode(property.getCountry().getCode());
-                    propertyCount.setScreenshotOfBookingEngineUrl(property.getScreenshotOfBookingEngineUrl());
-                    propertyCount.setBrandOfBookingEngineId(property.getBrandOfBookingEngineId());
-                    propertyCount.setEHotelId(property.getEHotelId());
                     setPropertyCount(property, propertyCount);
                     hashMap.put(property.getCountry().getId(), propertyCount);
                 }
@@ -369,6 +366,15 @@ public class PropertyServiceImpl implements PropertyService {
         if (Objects.nonNull(property.getGoogleBusinessID())) {
             propertyCount.setGoogleBusinessID(propertyCount.getGoogleBusinessID() + 1);
         }
+        if (Objects.nonNull(property.getScreenshotOfBookingEngineUrl())) {
+            propertyCount.setScreenshotOfBookingEngineUrl(propertyCount.getScreenshotOfBookingEngineUrl() + 1);
+        }
+        if (Objects.nonNull(property.getBrandOfBookingEngineId())) {
+            propertyCount.setBrandOfBookingEngineId(propertyCount.getBrandOfBookingEngineId() + 1);
+        }
+        if (Objects.nonNull(property.getEHotelId())) {
+            propertyCount.setEHotelId(propertyCount.getEHotelId() + 1);
+        }
         if (Objects.nonNull(property.getName())) {
             propertyCount.setName(propertyCount.getName() + 1);
         }
@@ -417,9 +423,9 @@ public class PropertyServiceImpl implements PropertyService {
         totalCount.setPropertyId(propertyCount.getPropertyId() + totalCount.getPropertyId());
         totalCount.setEmail(propertyCount.getEmail() + totalCount.getEmail());
         totalCount.setGoogleBusinessID(propertyCount.getGoogleBusinessID() + totalCount.getGoogleBusinessID());
-        totalCount.setScreenshotOfBookingEngineUrl("");
-        totalCount.setBrandOfBookingEngineId(0);
-        totalCount.setEHotelId(0);
+        totalCount.setScreenshotOfBookingEngineUrl(propertyCount.getScreenshotOfBookingEngineUrl() + totalCount.getScreenshotOfBookingEngineUrl());
+        totalCount.setBrandOfBookingEngineId(propertyCount.getBrandOfBookingEngineId() + totalCount.getBrandOfBookingEngineId());
+        totalCount.setEHotelId(propertyCount.getEHotelId() + totalCount.getEHotelId());
         totalCount.setName(propertyCount.getName() + totalCount.getName());
         totalCount.setGoogleAddress(propertyCount.getGoogleAddress() + totalCount.getGoogleAddress());
         totalCount.setGooglePhoneNumber(propertyCount.getGooglePhoneNumber() + totalCount.getGooglePhoneNumber());

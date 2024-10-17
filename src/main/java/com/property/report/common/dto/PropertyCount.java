@@ -57,20 +57,23 @@ public class PropertyCount {
 
     private float longitude;
 
-    private String screenshotOfBookingEngineUrl;
+    private float screenshotOfBookingEngineUrl;
 
-    private Integer brandOfBookingEngineId;
+    private float brandOfBookingEngineId;
 
-    private Integer eHotelId;
+    private float eHotelId;
 
     public PropertyCount(String totalSumOfProperties) {
         this.country = totalSumOfProperties;
     }
 
     public PropertyCount(PropertyCount propertyCount) {
-        this.email = convertfloat((propertyCount.getEmail() / propertyCount.getPropertyId()));
         this.propertyId = 100.0f;
         this.netProperty = 100.0f;
+        this.email = convertfloat((propertyCount.getEmail() / propertyCount.getNetProperty()));
+        this.screenshotOfBookingEngineUrl = convertfloat((propertyCount.getScreenshotOfBookingEngineUrl() / propertyCount.getPropertyId()));
+        this.brandOfBookingEngineId = convertfloat((propertyCount.getBrandOfBookingEngineId() / propertyCount.getPropertyId()));
+        this.eHotelId = convertfloat((propertyCount.getEHotelId() / propertyCount.getPropertyId()));
         this.name = convertfloat(propertyCount.getName() / propertyCount.getNetProperty());
         this.googleAddress = convertfloat(propertyCount.getGoogleAddress() / propertyCount.getNetProperty());
         this.googleBusinessID = convertfloat(propertyCount.getGoogleBusinessID() / propertyCount.getNetProperty());
