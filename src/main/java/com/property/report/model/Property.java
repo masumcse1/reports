@@ -76,9 +76,9 @@ public class Property {
 
     private String screenshotOfBookingEngineUrl;
 
-    private Integer brandOfBookingEngineId;
+    private String brandOfBookingEngineId;
 
-    private Integer eHotelId;
+    private String eHotelId;
 
     @ManyToOne
     @JoinColumn(name = "country_id", referencedColumnName = "id", nullable = true)
@@ -111,7 +111,45 @@ public class Property {
             this.googleMetaSearchLinksUrl = freeGoogleBooking.getGoogleMetaSearchLinksUrl();
             this.googleMapsWithGoogleBusinessPlacesIdScreenshotUrl = freeGoogleBooking.getGoogleMapsWithGoogleBusinessPlacesIdScreenshotUrl();
             this.screenshotOfBookingEngineUrl = freeGoogleBooking.getScreenshotOfBookingEngineUrl();
-            this.brandOfBookingEngineId = freeGoogleBooking.getBrandOfBookingEngineId();
+//            this.brandOfBookingEngineId = freeGoogleBooking.getBrandOfBookingEngineId();
         }
+    }
+
+    public Property(PropertyDto propertyDto, FreeGoogleBooking freeGoogleBooking, Country country, String bookingDotComId, String bookingDotComUrl, String eHotelId) {
+//        System.out.println("propertyDto.getId() = " + propertyDto.getId());
+//        System.out.println("bookingDotComId = " + bookingDotComId);
+//        System.out.println("bookingDotComUrl = " + bookingDotComUrl);
+//        System.out.println("eHotelId = " + eHotelId);
+
+        this.id = propertyDto.getId();
+        this.propertyId = propertyDto.getId();
+        this.name = propertyDto.getName();
+        this.email = getPropertyEmail(propertyDto);
+        this.emailAddressUnsubscribe = propertyDto.isEmailAddressUnsubscribe();
+        this.country = country;
+        this.isDeleted = propertyDto.getIsDeleted();
+        this.forTesting = propertyDto.getForTesting();
+        this.propertyWebsiteURL = propertyDto.getWebsite();
+        if (Objects.nonNull(propertyDto.getGeoCode())) {
+            this.latitude = propertyDto.getGeoCode().getLatitude();
+            this.longitude = propertyDto.getGeoCode().getLongitude();
+        }
+        if (Objects.nonNull(freeGoogleBooking)) {
+            this.websiteURL = freeGoogleBooking.getWebsiteUrl();
+            this.usedBookingEngine = freeGoogleBooking.getBrandOfBookingEngine();
+            this.googleBusinessID = freeGoogleBooking.getGoogleBusinessPlacesId();
+            this.freeGoogleBookingLinks = freeGoogleBooking.getFreeGoogleBookingLinks();
+            this.cmsUsedInWebsite = freeGoogleBooking.getCmsUsedInWebsite();
+            this.googleCategory = freeGoogleBooking.getGoogleCategory();
+            this.googlePhoneNumber = freeGoogleBooking.getGooglePhoneNumber();
+            this.googleRating = freeGoogleBooking.getGoogleRating();
+            this.googleAddress = freeGoogleBooking.getGoogleAddress();
+            this.googleMetaSearchLinksUrl = freeGoogleBooking.getGoogleMetaSearchLinksUrl();
+            this.googleMapsWithGoogleBusinessPlacesIdScreenshotUrl = freeGoogleBooking.getGoogleMapsWithGoogleBusinessPlacesIdScreenshotUrl();
+
+        }
+        this.screenshotOfBookingEngineUrl = bookingDotComUrl;
+        this.brandOfBookingEngineId = bookingDotComId;
+        this.eHotelId = eHotelId;
     }
 }
