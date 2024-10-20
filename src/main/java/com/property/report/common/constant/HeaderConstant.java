@@ -4,19 +4,21 @@ import com.property.report.common.dto.PropertyCount;
 import com.property.report.model.Country;
 import com.property.report.model.Property;
 
-import java.util.Objects;
-
 public class HeaderConstant {
 
-    public static final String[] HEADERS = {"S.NO", "Property ID", "Google Business ID", "Property Name",
+    public static final String[] HEADERS = {"S.NO", "Property ID", "Google Business ID",
+            "Booking.com URL", "Booking.com id", "EHotel id", "Property Name",
             "Google Address", "Email address", "Google phone number", "Website URL", "Used booking engine",
             "Google Category", "Free Google Booking links", "Google Rating", "CMS used in Website",
-            "emailAddressUnsubscribe", "topic", "sentAt"};
+            "emailAddressUnsubscribe", "topic", "sentAt", "isDeleted", "forTesting"};
 
     public static String[] convertDetailsToString(Property campaignData, int i) {
         return new String[]{String.valueOf(i),
                 String.valueOf(campaignData.getPropertyId()),
                 campaignData.getGoogleBusinessID(),
+                campaignData.getScreenshotOfBookingEngineUrl(),
+                campaignData.getBrandOfBookingEngineId(),
+                campaignData.getEHotelId(),
                 campaignData.getName(),
                 campaignData.getGoogleAddress(),
                 campaignData.getEmail(),
@@ -29,7 +31,9 @@ public class HeaderConstant {
                 campaignData.getCmsUsedInWebsite(),
                 String.valueOf(campaignData.getEmailAddressUnsubscribe()),
                 campaignData.getTopic(),
-                campaignData.getSentAt()};
+                campaignData.getSentAt(),
+                String.valueOf(campaignData.getIsDeleted()),
+                String.valueOf(campaignData.getForTesting())};
     }
 
     public static final String[] WORLD_HEADERS = {"S.NO", "Country", "Country code", "Property ID", "Google Business ID",
