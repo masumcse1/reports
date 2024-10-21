@@ -16,6 +16,8 @@ public interface PropertyService {
 
     void updateProperty(Integer propertyId,String token);
 
+    void deleteProperty(Integer propertyId,String token);
+
     void updateSentMessageProperty(String token);
 
     ListResultRdo<Integer> getPropertyByCountryAndEmail(Integer page, Integer size, String code);

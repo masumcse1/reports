@@ -121,6 +121,17 @@ public class PropertyController {
 
     }
 
+    @Operation(summary = "Delete Property",
+            description = "Delete Property if not found in Supplier DB")
+    @DeleteMapping("/api/v1/delete-property")
+    public void delete(@RequestBody PropertyDataDto propertyDataDto) {
+
+        log.info("Property Id: ={} Table Name={}", propertyDataDto.getPropertyId(), propertyDataDto.getTableName());
+        ACCESS_TOKEN = tokenService.getTokenFromSuppliers().getAccessToken();
+        propertyService.deleteProperty(propertyDataDto.getPropertyId(), ACCESS_TOKEN);
+
+    }
+
     @GetMapping("/api/v1/test-email")
     public void sendTestemail(HttpServletResponse servletResponse) {
 

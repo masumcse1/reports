@@ -226,6 +226,25 @@ public class PropertyServiceImpl implements PropertyService {
 
     }
 
+    @Transactional
+    @Override
+    public void deleteProperty(Integer propertyId, String token) {
+
+        PropertyDto dataByPropertyId = supplierService.getDataByPropertyId(propertyId, token);
+
+        if (Objects.isNull(dataByPropertyId)) {
+            log.error("No property data found for property ID: {}", propertyId);
+
+            Property byPropertyId = propertyRepository.findByPropertyId(propertyId);
+
+            if (!Objects.isNull(propertyId)) {
+                propertyRepository.delete(byPropertyId);
+                log.info("Data deleted for property ID :={}", propertyId);
+            }
+        }
+
+    }
+
     @Scheduled(cron = "0 0 10 * * *")
     public void updatePropertyByCountry() {
         if (enabled) {
