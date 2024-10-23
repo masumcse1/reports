@@ -64,7 +64,7 @@ public class PropertyStorageServiceImpl implements PropertyStorageService {
         log.info("---data save done for this page...");
     }
 
-    private Result getPropertyIdentifierValues(PropertyDto data) {
+    private Result getPropertyIdentifierValues(PropertyDto propertyDto) {
         AccessTokenSupplier tokenFromSuppliers = tokenService.getTokenFromSuppliers();
         String token = tokenFromSuppliers.getAccessToken();
 
@@ -75,7 +75,7 @@ public class PropertyStorageServiceImpl implements PropertyStorageService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         String apiUrl = supplierUrl
-                + "properties/identifier/" + data.getId();
+                + "properties/identifier/" + propertyDto.getId();
 
         String bookingDotComId = "";
         String bookingDotComUrl = "";
@@ -98,7 +98,6 @@ public class PropertyStorageServiceImpl implements PropertyStorageService {
 
                 for (int i = 0; i < propertyIdentifierList.size(); i++) {
                     PropertyIdentifier propertyIdentifier = propertyIdentifierList.get(i);
-
 
                     if("Booking.com".equals(propertyIdentifier.getSource().getName())) {
                         bookingDotComId = propertyIdentifier.getIdentifier();

@@ -116,10 +116,6 @@ public class Property {
     }
 
     public Property(PropertyDto propertyDto, FreeGoogleBooking freeGoogleBooking, Country country, String bookingDotComId, String bookingDotComUrl, String eHotelId) {
-//        System.out.println("propertyDto.getId() = " + propertyDto.getId());
-//        System.out.println("bookingDotComId = " + bookingDotComId);
-//        System.out.println("bookingDotComUrl = " + bookingDotComUrl);
-//        System.out.println("eHotelId = " + eHotelId);
 
         this.id = propertyDto.getId();
         this.propertyId = propertyDto.getId();

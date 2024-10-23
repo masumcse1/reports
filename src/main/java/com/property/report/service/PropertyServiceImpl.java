@@ -1,11 +1,14 @@
 package com.property.report.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.property.report.common.dto.*;
 import com.property.report.exception.DataNotFoundException;
 import com.property.report.model.Country;
 import com.property.report.model.Property;
 import com.property.report.repository.CountryRepository;
 import com.property.report.repository.PropertyRepository;
+import com.property.report.service.property.PropertyStorageServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -15,9 +18,11 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -25,6 +30,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.property.report.common.constant.EmailBodyConverter.convertEmailBody;
@@ -50,6 +56,12 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Value("${updatePropertyByCountry.cron.flag}")
     boolean enabled;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Value("${supplier.api.url}")
+    private String supplierUrl;
 
     @Override
     @Transactional
@@ -216,17 +228,76 @@ public class PropertyServiceImpl implements PropertyService {
         if (Objects.isNull(byPropertyId)) {
             if (Objects.nonNull(dataByPropertyId.getAddresses()) && !dataByPropertyId.getAddresses().isEmpty()) {
                 Country country = countryRepository.findByCode(dataByPropertyId.getAddresses().get(0).getCountry().getCode());
-                propertyRepository.save(new Property(dataByPropertyId, freeGoogleBooking, country));
+                //propertyRepository.save(new Property(dataByPropertyId, freeGoogleBooking, country));
+                Result result = getPropertyIdentifierValues(dataByPropertyId);
+                propertyRepository.save(new Property(dataByPropertyId, freeGoogleBooking, country, result.bookingDotComId(), result.bookingDotComUrl(), result.eHotelId()));
                 log.info("Data added for property ID :={}", propertyId);
             }
         } else {
-            propertyRepository.save(new Property(dataByPropertyId, freeGoogleBooking, byPropertyId.getCountry()));
+//            propertyRepository.save(new Property(dataByPropertyId, freeGoogleBooking, byPropertyId.getCountry()));
+            Result result = getPropertyIdentifierValues(dataByPropertyId);
+            propertyRepository.save(new Property(dataByPropertyId, freeGoogleBooking, byPropertyId.getCountry(), result.bookingDotComId(), result.bookingDotComUrl(), result.eHotelId()));
             log.info("Data updated for property ID :={}", propertyId);
         }
 
     }
 
-    @Transactional
+    private PropertyServiceImpl.Result getPropertyIdentifierValues(PropertyDto propertyDto) {
+        AccessTokenSupplier tokenFromSuppliers = tokenService.getTokenFromSuppliers();
+        String token = tokenFromSuppliers.getAccessToken();
+
+        RestTemplate template = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + token);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        String apiUrl = supplierUrl
+                + "properties/identifier/" + propertyDto.getId();
+
+        String bookingDotComId = "";
+        String bookingDotComUrl = "";
+        String eHotelId = "";
+
+        try {
+            ResponseEntity<?> response = template.exchange (
+                    apiUrl,
+                    HttpMethod.GET,
+                    entity,
+                    Map.class);
+
+            // Ensure the response body is not null
+            if (response.getBody() != null) {
+                Map<String, Object> responseBody = (Map<String, Object>) response.getBody();
+
+                // Validate if 'result' exists and is of Map type
+                List<PropertyIdentifier> propertyIdentifierList = new ObjectMapper()
+                        .convertValue(responseBody.get("result"), new TypeReference<List<PropertyIdentifier>>() {});
+
+                for (int i = 0; i < propertyIdentifierList.size(); i++) {
+                    PropertyIdentifier propertyIdentifier = propertyIdentifierList.get(i);
+
+                    if("Booking.com".equals(propertyIdentifier.getSource().getName())) {
+                        bookingDotComId = propertyIdentifier.getIdentifier();
+                        bookingDotComUrl = propertyIdentifier.getUrl();
+                    } else if("eHotel".equals(propertyIdentifier.getSource().getName())) {
+                        eHotelId = propertyIdentifier.getIdentifier();
+                    }
+
+                }
+            } else {
+                throw new IllegalStateException("API response body is null.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        PropertyServiceImpl.Result result = new PropertyServiceImpl.Result(bookingDotComId, bookingDotComUrl, eHotelId);
+        return result;
+    }
+
+    private record Result(String bookingDotComId, String bookingDotComUrl, String eHotelId) {
+    }
+
     @Override
     public void deleteProperty(Integer propertyId, String token) {
 
